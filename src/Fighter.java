@@ -1,8 +1,12 @@
+import java.io.IOException;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Fighter {
     public static final int WIDTH = 30, HEIGHT = 10;
     public static final int MAX_HP = 5, MAX_SCORE = 5;
+    public static final int flushInterval = 10;
+    public static final int enemyMoveInterval = 50;
     static int fighterX, fighterY;
     static int bulletX, bulletY;
     static int enemyX, enemyY;
@@ -14,7 +18,7 @@ public class Fighter {
     public static void init() {
         fighterX = WIDTH / 2;
         fighterY = HEIGHT / 2;
-        enemyX = new Random().nextInt(1, WIDTH);
+        enemyX = new Random().nextInt(1, WIDTH - 1);
         enemyY = 0;
         bulletX = -1;  // by default, no bullet
         bulletY = -1;
@@ -28,11 +32,22 @@ public class Fighter {
 
 
     public static void drawPicture() {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Score: " + score + "\n" + " HP: " + hp);
         switch (status) {
             case NORMAL -> paintGame();
-            case WIN -> System.out.println("You Win!");
-            case LOSE -> System.out.println("You Lose!");
+            case WIN -> {
+                System.out.println("You Win!");
+                System.out.println("Press any key to exit...");
+                scanner.nextLine();
+                System.exit(0);
+            }
+            case LOSE -> {
+                System.out.println("You Lose!");
+                System.out.println("Press any key to exit...");
+                scanner.nextLine();
+                System.exit(0);
+            }
         }
     }
 
@@ -69,22 +84,24 @@ public class Fighter {
                 status = Status.WIN;
                 return;
             }
-            enemyX = new Random().nextInt(1, WIDTH);
+            enemyX = new Random().nextInt(1, WIDTH - 1);
+            enemyY = 0;
         }
-        if (enemyX == fighterX && enemyY == fighterY) {
+        if (enemyX == fighterX && enemyY == fighterY || enemyY == HEIGHT) {
             hp--;
             if (hp == 0) {
                 status = Status.LOSE;
                 return;
             }
-            enemyX = new Random().nextInt(1, WIDTH);
+            enemyX = new Random().nextInt(1, WIDTH - 1);
+            enemyY = 0;
         }
     }
 
 
     private static void handleEnemyMoving() {
         enemyMoveCount++;
-        if (enemyMoveCount % 10 == 0) {
+        if (enemyMoveCount % enemyMoveInterval == 0) {
             enemyY++;
         }
     }
@@ -93,9 +110,9 @@ public class Fighter {
         bulletY--;
     }
 
-    public static void rePaint() throws InterruptedException {
-        // sleep for 0.2 secs
-        Thread.sleep(100);
+    public static void rePaint() throws InterruptedException, IOException {
+        // sleep for 0.1 secs
+        Thread.sleep(flushInterval);
         System.out.print("\033[H\033[2J");
         System.out.flush();
         drawPicture();

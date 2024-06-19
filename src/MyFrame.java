@@ -29,10 +29,22 @@ public class MyFrame extends JFrame implements KeyListener {
         int keyCode = e.getKeyCode();
 
         switch (keyCode) {
+            case KeyEvent.VK_UP:
+            case KeyEvent.VK_W:
+                moveFighter(0, -1);
+//                System.out.println("up");
+                break;
+            case KeyEvent.VK_DOWN:
+            case KeyEvent.VK_S:
+                moveFighter(0, 1);
+//                System.out.println("down");
+                break;
+
+
             case KeyEvent.VK_LEFT:
             case KeyEvent.VK_A:
                 moveFighter(-1, 0);
-                System.out.println("left");
+//                System.out.println("left");
                 break;
             case KeyEvent.VK_RIGHT:
             case KeyEvent.VK_D:
@@ -51,7 +63,7 @@ public class MyFrame extends JFrame implements KeyListener {
     }
 
     private static void shoot() {
-        Fighter.bulletX = Fighter.fighterX - 1;
-        Fighter.bulletY = Fighter.fighterY;
+        Fighter.bulletX = Fighter.fighterX;
+        Fighter.bulletY = Fighter.fighterY - 1;
     }
 }
