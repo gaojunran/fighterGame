@@ -1,10 +1,10 @@
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Fighter.init();
         Fighter.drawPicture();
         while (true) {
-//            pcOperate();
-//            operateFighter();
+            Fighter.reCalc();
+            Fighter.rePaint();
         }
     }
 
