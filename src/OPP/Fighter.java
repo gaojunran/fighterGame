@@ -1,4 +1,5 @@
-import java.io.IOException;
+package OPP;
+
 import java.util.Random;
 import java.util.Scanner;
 
@@ -33,7 +34,7 @@ public class Fighter {
 
     public static void drawPicture() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Score: " + score + "\n" + " HP: " + hp);
+        System.out.println("Score: " + score + "\n" + "HP: " + hp);
         switch (status) {
             case NORMAL -> paintGame();
             case WIN -> {
@@ -110,7 +111,7 @@ public class Fighter {
         bulletY--;
     }
 
-    public static void rePaint() throws InterruptedException, IOException {
+    public static void rePaint() throws InterruptedException {
         // sleep for 0.1 secs
         Thread.sleep(flushInterval);
         System.out.print("\033[H\033[2J");
