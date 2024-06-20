@@ -1,5 +1,6 @@
 package OOP;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -12,7 +13,7 @@ public class Game {
     public static final int ENEMY_BULLET_INTERVAL = 10;
 
     public static int flushCount;
-
+    JFrame frame;
     public GameStatus gameStatus;
     int score;
     FoeFighter foeFighter;
@@ -27,6 +28,17 @@ public class Game {
             flush();
             drawInterface();
         }
+    }
+
+
+    private void buildFrame() {
+        frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.addKeyListener(foeFighter);
+        frame.setSize(10, 10);
+        frame.setVisible(true);
+        frame.setFocusable(true);
+        frame.requestFocusInWindow();
     }
 
     private void paintGame() {
@@ -71,6 +83,7 @@ public class Game {
 
     private static void flush() throws InterruptedException {
         Thread.sleep(FLUSH_MILLIS);
+        System.out.print("\033[?25l");
         System.out.print("\033[H\033[2J");
         System.out.flush();
         flushCount++;
@@ -114,6 +127,7 @@ public class Game {
         if (beHit != null) {
             foeFighter.hp--;
             enemyFighters.remove(beHit);
+            enemyFighters.add(new EnemyFighter());
             if (foeFighter.hp == 0) {
                 gameStatus = GameStatus.LOSE;
                 return;
@@ -121,7 +135,7 @@ public class Game {
         }
 
         // score++ & update enemy
-        if (foeFighter.bullet != null) {
+        if (foeFighter.bullet != null && meetEnemyFighter(enemyFighters, foeFighter.bullet.x, foeFighter.bullet.y) != null) {
             score++;
             enemyFighters.remove(meetEnemyFighter(enemyFighters, foeFighter.bullet.x, foeFighter.bullet.y));
             enemyFighters.add(new EnemyFighter());
@@ -138,7 +152,7 @@ public class Game {
         for (int i = 0; i < ENEMY_NUM; i++) {
             enemyFighters.add(new EnemyFighter());
         }
-        new MyFrame();
+        buildFrame();
         gameStatus = GameStatus.NORMAL;
         score = 0;
         flushCount = 0;
